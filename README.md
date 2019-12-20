@@ -11,36 +11,28 @@ A plot of the regressor variable, total_cases, time series components shows pote
 
 ## Decomposition of Total_Case Time Series
 
-Computing the Pearson Correlation Coefficients of our data set allow us to better understand the linear relationship between the response and regressor variables.  All the vegetation index variables (ndvi_ne, ndvi_nw, ndvi_se, ndvi_sw) appear to have a minimal inverse relationship with response variable total_cases.  This minimal relationship will lead us to remove this variables from our analysis as they initially appear to not significantly contribute to the number of casese of Denuge Fever.  Counter to intuition, the precipitation related regressors (precipitation_amt_mm, reanalysis_precip_amt_kg_per_m2, reanalysis_sat_precip_amt_mm,  station_precip_mm) have a minimal inverse relationship with total_cases.  This seems strange because large pools of water provide places for mosquitos to lay their eggs and reproduce, increasing the number of transmitters.  We will also remove these variable from our initial analysis because they appear to have minimal association with our response variable total_cases.  The regressor variables that relate to air temperature (reanalysis_air_temp_k, reanalysis_avg_temp_k, reanalysis_max_air_temp_k, reanalysis_min_air_temp_k, station_avg_temp_c, station_diur_temp_rng_c, station_max_temp_c , station_min_temp_c, reanalysis_tdtr_k) with an emphasis on the minimum temperatures had a relatively strong linear relationship with the response variable.  I’m hypothesizing that below a certain minimum temperature, the mosquito eggs and larvae die thereby reducing the overall population of Dengue Fever transmitters.  The predictor variables that relate to humidity (reanalysis_relative_humidity_percent,  reanalysis_specific_humidity_g_per_kg, reanalysis_relative_humidity_percent, reanalysis_air_temp_k
-, reanalysis_dew_point_temp_k) also appear to have relatively strong relationship with the response variable total_cases.  The computation and analysis of the Pearson Correlation Coefficient, has led me to believe that warmer, more humid temperatures contribute to the spread of Dengue Fever in San Juan, Puerto Rico and Iquitos, Peru.
-
-Regressor Variable R-value (Linear Relationship) with Response Variable Total_Cases       
+Computing the Pearson Correlation Coefficients of our data set allow us to better understand the linear relationship between the response and regressor variables.  All the vegetation index variables (ndvi_ne, ndvi_nw, ndvi_se, ndvi_sw) appear to have a minimal inverse relationship with response variable total_cases.  This minimal relationship will lead us to remove this variables from our analysis as they initially appear to not significantly contribute to the number of casese of Denuge Fever.  Counter to intuition, the precipitation related regressors (precipitation_amt_mm, reanalysis_precip_amt_kg_per_m2, reanalysis_sat_precip_amt_mm,  station_precip_mm) have a minimal inverse relationship with total_cases.  This seems strange because large pools of water provide places for mosquitos to lay their eggs and reproduce, increasing the number of transmitters.  We will also remove these variable from our initial analysis because they appear to have minimal association with our response variable total_cases.  The regressor variables that relate to air temperature (reanalysis_air_temp_k, reanalysis_avg_temp_k, reanalysis_max_air_temp_k, reanalysis_min_air_temp_k, station_avg_temp_c, station_diur_temp_rng_c, station_max_temp_c , station_min_temp_c, reanalysis_tdtr_k) with an emphasis on the minimum temperatures had a relatively strong linear relationship with the response variable.  I’m hypothesizing that below a certain minimum temperature, the mosquito eggs and larvae die thereby reducing the overall population of Dengue Fever transmitters.  The predictor variables that relate to humidity (reanalysis_relative_humidity_percent,  reanalysis_specific_humidity_g_per_kg, reanalysis_relative_humidity_percent, reanalysis_air_temp_k, reanalysis_dew_point_temp_k) also appear to have relatively strong relationship with the response variable total_cases.  The computation and analysis of the Pearson Correlation Coefficient, has led me to believe that warmer, more humid temperatures contribute to the spread of Dengue Fever in San Juan, Puerto Rico and Iquitos, Peru.
 
 ## Data Preparation
 
 Data preparation efforts consisted of variable transformation for ordinary least squares regression and imputation of missing records.  While not necessary for generalized linear models, to include logistic regression, Box Cox variable transformation produced an improved predictive model over other methods of transformation.  Logistic, additive, and multiplicative transformation were attempted, however the Box Cox transformation proved to be superior.  Adhering to the assumptions of linear regression (i.e. normal and independent distribution, linear relationship between variables, no or limited autocorrelation/multicollinearity, homoscedasticity) produced a more accurate model.  Rather than using measure of central tendency to replace missing records, I choose to use the last value in the regressors’ time series to replace any missing records.  This imputation methodology seemed the most logical because it reflected the tendencies of that variable, at that specific week in time. No outliers were removed from the data to their effects upon the selected Linear, Logistic, and Poisson Regression models.
-
-Regressor Variable Distributions
-
-
 
 ## Model Development & Selection
 	
 During our analysis, we built multiple multivariate linear regression, Neural Network, and time series models utilizing Poisson, Negative Binomial, and ARIMA regression with both untransformed and transformed (box cox transformation) variables.  Following variable transformation and imputation, we progressed to splitting the designated training data 70/30 with 70% composing the revise training set and 30% creating a new validation data set.  This validated data was used to compare each model’s predictions against the validated data’s total_cases, using the mean absolute error (MAE) to assess goodness of fit.  Due to the number of variables in the provided data set, we selected our chosen model’s regressor variables based off the strength of their linear relationship with the response variable total_cases.   A summary of the accuracy outcomes is below for comparison:
 
 #### Model Type  MAE
-General Linear Regression		15.53116
-Negative Binomial	        	12.4032
-Poisson                         	12.40738
-Neural Network w/ Log Xfer      	14.09859
-Gen. Linear Regression w/ Box Cox Xfer	14.53373
-Negative Binomial w/ Box Cox Xfer	12.46298
-Poisson w/ Box Cox Xfer		        12.48098
-Neural Network				15.14978
-ARIMA of Total_Cases			13.4056
-Neural Network w/ Log & Box Cox Xfer	19.40339
-Negative Binomial w/ Box Cox Xfer  
-of reanalysis_min_air_temp		12.402
+* General Linear Regression		15.53116
+* Negative Binomial	        	12.4032
+* Poisson                         	12.40738
+* Neural Network w/ Log Xfer      	14.09859
+* Gen. Linear Regression w/Box Cox Xfer 14.53373
+* Negative Binomial w/Box Cox Xfer	12.46298
+* Poisson w/Box Cox Xfer		12.48098
+* Neural Network			15.14978
+* ARIMA of Total_Cases			13.4056
+* Neural Network w/ Log & Box Cox Xfer	19.40339
+* Negative Binomial w/ Box Cox Xfer of reanalysis_min_air_temp	12.402
 
 Our selected model, is a multivariate negative binomial linear regression model incorporating a box-cox transformation of the regressor variable reanalysis_min_air_temp that takes the form:
 
@@ -79,10 +71,10 @@ station_min_temp_c
 
 Error Term
 
-
 ## Model Notes:
-♣	reanalysis_avg_temp_k has a negative coefficient which is counter to intuition.  I would hypothesize that warmer temperatures would contribute to more cases of Dengue by creating favorable conditions for mosquito eggs and larvae.
-♣	reanalysis_min_air_temp_k underwent a box cox transformation that improved its R value from 0.1882959 to 0.188747.
+* reanalysis_avg_temp_k has a negative coefficient which is counter to intuition.  I would hypothesize that warmer temperatures would contribute to more cases of Dengue by creating favorable conditions for mosquito eggs and larvae.
+
+* reanalysis_min_air_temp_k underwent a box cox transformation that improved its R value from 0.1882959 to 0.188747.
 
 ## Summary
 
