@@ -1,3 +1,5 @@
+## Predicting the Spread of Dengue Fever in San Juan, Puerto Rico and Iquitos, Peru 
+
 ## Executive Summary & Introduction
 
 The purpose of this analysis is to predict the number of cases of Dengue Fever in San Juan, Puerto Rico and Iquitos, Peru given environmental variables for a specific week of the year.  Because the transmission method of Dengue Fever is mosquitos, the transmission dynamics are related to environmental variables such as precipitation, humidity, and minimum & maximum temperatures.  In this paper, we will review the exploratory data analysis, data preparation, model building, and model selection processes that led us develop and build our predictive model. 
